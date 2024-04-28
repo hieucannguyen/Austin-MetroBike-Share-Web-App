@@ -6,6 +6,9 @@ Must have [Docker](https://docs.docker.com/get-docker/) installed on your system
 ## ISS Data Overview
 The [Human Genome Organization (HUGO) Gene Nomenclature Committee](https://www.genenames.org/download/archive/) provides access to thier gene dataset available in both tab separated and JSON formats. It contains information about approved gene symbols, their associated names, locus groups, locus types, statuses, genomic locations, aliases, previous symbols and names, gene families, and various identifiers such as Entrez Gene ID, Ensembl Gene ID, and UniProt accession numbers, among others.
 
+~~~
+$ wget https://data.austintexas.gov/api/views/tyfh-5r8s/rows.csv?accessType=DOWNLOAD -O Austin_MetroBike_Trips.csv
+~~~
 ## File Descriptions
 ~~~
 Homework07/
