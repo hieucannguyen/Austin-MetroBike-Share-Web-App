@@ -32,15 +32,16 @@ def submit_jobs():
         Route to send a job to redis database
 
         Methods:
-            POST: Send a job to redis database
+            POST: Send a job to redis database given a
+            json object with a start_date and a end_date parameter
     """
     data = request.get_json()
     try:
         #logging.debug(f'symbol: {data['symbol']}, gene_group{data['gene_family']}')
-        job_dict = add_job(data['gene_group'])
+        job_dict = add_job(data['start_date'], data['end_date'])
     except KeyError:
-        logging.error('invalid parameters, must pass a symbol and a gene_family')
-        return jsonify({'message':'invalid parameters, must pass a gene_group'})
+        logging.error('invalid parameters, must pass a start_date and a end_date')
+        return jsonify({'message':'invalid parameters, must pass a start_date and a end_date'})
     return job_dict
 
 @app.route('/jobs', methods=['GET'])

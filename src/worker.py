@@ -23,38 +23,32 @@ def do_work(jobid):
     # get job
     update_job_status(jobid, 'in progress')
     job = get_job_by_id(jobid)
-    # get genes specified by group
-    genes = get_genes_by_groups(job['gene_group'])
-    date_freq = {}
-    for gene in genes:
-        if gene.get('date_approved_reserved'): # none value handling
-            date_object = datetime.strptime(gene['date_approved_reserved'], '%Y-%m-%d').date() # extract time
-            year = date_object.strftime('%Y') # extract year
-            date_freq[year] = date_freq.get(year, 0) + 1
-    logging.debug(f'length of result: {len(date_freq)}')
-    if not date_freq:
-        logging.error('job did not find anything, empty result')
+    
+    date_freq = get_trips_freq_between_dates(job['start_date'], job['end_date'])
     rdb.set(jobid, json.dumps(date_freq)) # input to results database
     update_job_status(jobid, 'complete') # update job database
 
-def get_genes_by_groups(group):
+def get_trips_freq_between_dates(start_date, end_date):
     """
-        Returns a list of genes specified by a gene group
+        Returns a list of bike trips between a range of dates
 
         Args:
-            group (string): specific gene group
+            start_date (string): starting date
+            end_date (string): ending date
     """
-    result = []
+    start = datetime.strptime(start_date, '%Y-%m-%d').date()
+    end = datetime.strptime(end_date, '%Y-%m-%d').date()
+    result = {}
     for key in rd.keys():
-        gene = json.loads(rd.get(key))
-        if gene.get('gene_group'): # none value handling
-            for g in gene.get('gene_group'):
-                if g == group:
-                    result.append(gene)
+        trip = json.loads(rd.get(key))
+        if trip.get('checkout_datetime'): # none value handling
+            checkout_date = trip.get('checkout_datetime')[:10]
+            date = datetime.strptime(checkout_date, '%Y-%m-%d').date()
+            if date >= start and date <= end:
+                result[checkout_date] = result.get(checkout_date, 0) + 1
     logging.debug(f'length of result: {len(result)}')
     if not result:
         logging.error('job did not find anything, empty result')
     return result
 
 do_work()
-
