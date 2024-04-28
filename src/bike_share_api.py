@@ -16,11 +16,11 @@ app = Flask(__name__)
 
 def get_data():
     """
-        Load gene dataset
+        Load bike share dataset
     """
     data = {}
     data['bike_trips'] = []
-    with open('..\Austin_MetroBike_Trips.csv', 'r') as f:
+    with open('Austin_MetroBike_Trips.csv', 'r') as f:
         reader = csv.DictReader(f)
         for row in reader:
             data['bike_trips'].append(dict(row))
