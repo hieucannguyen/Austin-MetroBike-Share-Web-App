@@ -4,6 +4,8 @@ import redis
 import csv
 import json
 from jobs import add_job, get_job_by_id, rd, jdb, rdb
+import datetime
+
 import logging
 import socket
 import os
@@ -37,12 +39,18 @@ def submit_jobs():
     """
     data = request.get_json()
     try:
-        #logging.debug(f'symbol: {data['symbol']}, gene_group{data['gene_family']}')
-        job_dict = add_job(data['start_date'], data['end_date'])
-    except KeyError:
+        start = datetime.strptime(data['start_date'], '%m/%d/%Y').date()
+        end = datetime.strptime(data['end_date'], '%m/%d/%Y').date()
+        logging.debug(f'start_date: {start}, end_date{end}')
+        if start >= end:
+            logging.error('start date cannot be after end date')
+            raise Exception()
+        job_dict = add_job(start, end)
+        return job_dict
+    except:
         logging.error('invalid parameters, must pass a start_date and a end_date')
-        return jsonify({'message':'invalid parameters, must pass a start_date and a end_date'})
-    return job_dict
+        return jsonify({'message':'invalid parameters, must pass a start_date and a end_date \
+                        and start_date must come before end_date'})
 
 @app.route('/jobs', methods=['GET'])
 def get_jobs():
