@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 import requests
 import redis
 import csv
@@ -63,15 +63,18 @@ def get_job(jobid):
         logging.error(f'job_id not found: {jobid}')
         return jsonify({'message': 'job_id not found'})
     
-@app.route('/results/<jobid>', methods=['GET'])
-def get_result(jobid):
+@app.route('/download/<jobid>', methods=['GET'])
+def get_chart(jobid):
     """
-        Return results of a specific job
+        Downloads results of a specific job
     """
     try:
         if get_job_by_id(jobid)['status'] != 'complete':
             return jsonify({'message': 'job is not finished yet, try again in a minute'})
-        return json.loads(rdb.get(jobid))
+        path = f'/app/bike_trips_chart.png'
+        with open(path, 'wb') as f:
+            f.write(rdb.hget(jobid, 'image'))
+        return send_file(path, mimetype='image/png', as_attachment=True)
     except:
         logging.error(f'job_id not found: {jobid}')
         return jsonify({'message': 'job_id not found'})
