@@ -18,7 +18,7 @@ app = Flask(__name__)
 
 def get_data():
     """
-        Load bike share dataset
+        Load bike share dataset. csv -> json
     """
     data = {}
     data['bike_trips'] = []
@@ -40,10 +40,11 @@ def submit_jobs():
     data = request.get_json()
     try:
         logging.debug(data)
+        # ensure correct formatting
         start = datetime.strptime(data['start_date'], '%m/%d/%Y').date()
         end = datetime.strptime(data['end_date'], '%m/%d/%Y').date()
         logging.debug(f'start_date: {start}, end_date: {end}')
-        if start >= end:
+        if start >= end: # ensure end date is later than start date
             logging.error('start date cannot be after end date')
             raise Exception()
         job_dict = add_job(data['start_date'], data['end_date'])
@@ -57,10 +58,9 @@ def get_jobs():
     """
         Gets all jobs in the redis database
     """
-    #logging.debug(f'Jobs database keys{jdb.keys()}')
     return jsonify(jdb.keys())
 @app.route('/jobs/<jobid>', methods=['GET'])
-def get_job(jobid):
+def get_job(jobid: str):
     """
         Gets a specific job by unique uuid
     """
@@ -72,19 +72,18 @@ def get_job(jobid):
         return jsonify({'message': 'job_id not found'})
     
 @app.route('/download/<jobid>', methods=['GET'])
-def get_chart(jobid):
+def get_chart(jobid: str):
     """
         Downloads results of a specific job
     """
     logging.debug(rdb.keys())
-    #logging.debug(type(img))
     try:
-        if get_job_by_id(jobid)['status'] != 'complete':
+        if get_job_by_id(jobid)['status'] != 'complete': # ensure job is complete
             return jsonify({'message': 'job is not finished yet, try again in a minute'})
         path = f'{jobid}.png'
         with open(path, 'wb') as f:
-            f.write(rdb.hget(jobid, 'image'))
-        return send_file(path, mimetype='image/png', as_attachment=True)
+            f.write(rdb.hget(jobid, 'image')) # reconstruct data into a png file
+        return send_file(path, mimetype='image/png', as_attachment=True) # download file
     except Exception as e:
         logging.error(f'job_id not found: {jobid} ERROR: {e}')
         return jsonify({'message': 'job_id not found'})
@@ -127,7 +126,7 @@ def get_trips():
     return jsonify(rd.keys())
 
 @app.route('/trips/<trip_id>', methods=['GET'])
-def get_specific_trip(trip_id):
+def get_specific_trip(trip_id: str):
     """
         Return gene information of a specific trip_id
     """
@@ -151,7 +150,7 @@ def get_bikes():
         result_list.append(id)
     return jsonify(result_list)
 @app.route('/bikes/<bike_id>', methods=['GET'])
-def get_specific_bike(bike_id):
+def get_specific_bike(bike_id: str):
     """
         Return gene information of a specific bike_id
     """

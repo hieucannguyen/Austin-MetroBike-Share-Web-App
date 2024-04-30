@@ -33,7 +33,7 @@ def do_work(jobid):
     rdb.hset(jobid, 'image', img) # input to results database
     update_job_status(jobid, 'complete') # update job database
 
-def get_trips_freq_between_dates(start_date, end_date):
+def get_trips_freq_between_dates(start_date: str, end_date: str):
     """
         Returns a list of bike trips between a range of dates
 
@@ -45,18 +45,18 @@ def get_trips_freq_between_dates(start_date, end_date):
     start_date = datetime.strptime(start_date, '%m/%d/%Y').date()
     end_date = datetime.strptime(end_date, '%m/%d/%Y').date()
     group_by_days = True
-    if (end_date - start_date).days > 61:
+    if (end_date - start_date).days > 61: # ensure plot is not over crowded
         group_by_days = False
     result = {}
     for key in rd.keys():
         trip = json.loads(rd.get(key))
         if trip.get('Checkout Datetime'): # none value handling
-            checkout_date = trip.get('Checkout Datetime')[:10]
-            checkout_date_by_month = checkout_date[6:10]+'/'+checkout_date[:2]
+            checkout_date = trip.get('Checkout Datetime')[:10] # mm/dd/yyyy
+            checkout_date_by_month = checkout_date[6:10]+'/'+checkout_date[:2] # yyyy/mm
             date = datetime.strptime(checkout_date, '%m/%d/%Y').date()
             if date >= start_date and date <= end_date:
                 if group_by_days:
-                    result[checkout_date] = result.get(checkout_date, 0) + 1
+                    result[checkout_date[::-1]] = result.get(checkout_date[::-1], 0) + 1 # reverse so it sorts properly
                 else:
                     result[checkout_date_by_month] = result.get(checkout_date_by_month, 0) + 1
     logging.debug(f'length of result: {len(result)}')
@@ -71,12 +71,14 @@ def create_chart(result):
         Args:
             result (dict): dictionary of dates and counts
     """
+    # sort dictionart so plot is in chronological order
     sorted_keys = sorted(result.keys())
     sorted_values = [result[key] for key in sorted_keys]
     plt.bar(sorted_keys, sorted_values)
     plt.xlabel('Date')
     plt.xticks(rotation=90)
     plt.ylabel('Number of Trips')
+    plt.tight_layout()
     plt.savefig('bike_trips_chart.png')
 
 
