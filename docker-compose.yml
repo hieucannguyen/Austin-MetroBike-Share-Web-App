@@ -18,7 +18,7 @@ services:
             - redis-db
         environment:
           - REDIS_HOST=redis-db
-          - LOG_LEVEL=WARNING
+          - LOG_LEVEL=DEBUG
         image: hieucannguyen/bike_share_web_app:1.0
         ports:
             - 5000:5000
@@ -31,6 +31,6 @@ services:
         - redis-db
       environment:
         - REDIS_HOST=redis-db
-        - LOG_LEVEL=WARNING
+        - LOG_LEVEL=DEBUG
       command: ["python3", "-u", "worker.py"]
                   

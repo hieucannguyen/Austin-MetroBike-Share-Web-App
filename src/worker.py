@@ -25,9 +25,11 @@ def do_work(jobid):
     update_job_status(jobid, 'in progress')
     job = get_job_by_id(jobid)
     date_freq = get_trips_freq_between_dates(job['start_date'], job['end_date'])
+    logging.debug(date_freq)
     create_chart(date_freq)
-    with open('/bike_trips_chart.png', 'rb') as f:
+    with open('bike_trips_chart.png', 'rb') as f:
         img = f.read()
+    logging.debug(type(img))
     rdb.hset(jobid, 'image', img) # input to results database
     update_job_status(jobid, 'complete') # update job database
 
@@ -39,16 +41,18 @@ def get_trips_freq_between_dates(start_date, end_date):
             start_date (datetime): starting date
             end_date (datetime): ending date
     """
-    logging.debug(start_date, end_date)
+    logging.debug(f'{start_date}, {end_date}')
+    start_date = datetime.strptime(start_date, '%m/%d/%Y').date()
+    end_date = datetime.strptime(end_date, '%m/%d/%Y').date()
     group_by_days = True
-    if (start_date - end_date).days > 100:
+    if (end_date - start_date).days > 61:
         group_by_days = False
     result = {}
     for key in rd.keys():
         trip = json.loads(rd.get(key))
         if trip.get('Checkout Datetime'): # none value handling
             checkout_date = trip.get('Checkout Datetime')[:10]
-            checkout_date_by_month = checkout_date[:2]+'/'+checkout_date[6:10]
+            checkout_date_by_month = checkout_date[6:10]+'/'+checkout_date[:2]
             date = datetime.strptime(checkout_date, '%m/%d/%Y').date()
             if date >= start_date and date <= end_date:
                 if group_by_days:
@@ -67,8 +71,9 @@ def create_chart(result):
         Args:
             result (dict): dictionary of dates and counts
     """
-    sorted_result = dict(sorted(result.items()))
-    plt.bar(list(sorted_result.keys()), sorted_result.values())
+    sorted_keys = sorted(result.keys())
+    sorted_values = [result[key] for key in sorted_keys]
+    plt.bar(sorted_keys, sorted_values)
     plt.xlabel('Date')
     plt.xticks(rotation=90)
     plt.ylabel('Number of Trips')

@@ -2,6 +2,7 @@ import json
 import uuid
 import redis
 from hotqueue import HotQueue
+
 import os
 import logging
 import socket
@@ -12,7 +13,7 @@ _redis_port='6379'
 rd = redis.Redis(host=redis_host, port=_redis_port, db=0, decode_responses=True) # redis database
 q = HotQueue("queue", host=redis_host, port=_redis_port, db=1) # queue database
 jdb = redis.Redis(host=redis_host, port=_redis_port, db=2, decode_responses=True) # job database
-rdb = redis.Redis(host=redis_host, port=_redis_port, db=3, decode_responses=True) # results database
+rdb = redis.Redis(host=redis_host, port=_redis_port, db=3) # results database
 
 loglevel = os.environ.get('LOG_LEVEL')
 format_str=f'[%(asctime)s {socket.gethostname()}] %(filename)s:%(funcName)s:%(lineno)s - %(levelname)s: %(message)s'

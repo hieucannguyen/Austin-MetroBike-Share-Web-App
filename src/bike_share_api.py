@@ -4,7 +4,7 @@ import redis
 import csv
 import json
 from jobs import add_job, get_job_by_id, rd, jdb, rdb
-import datetime
+from datetime import datetime
 
 import logging
 import socket
@@ -39,18 +39,18 @@ def submit_jobs():
     """
     data = request.get_json()
     try:
+        logging.debug(data)
         start = datetime.strptime(data['start_date'], '%m/%d/%Y').date()
         end = datetime.strptime(data['end_date'], '%m/%d/%Y').date()
-        logging.debug(f'start_date: {start}, end_date{end}')
+        logging.debug(f'start_date: {start}, end_date: {end}')
         if start >= end:
             logging.error('start date cannot be after end date')
             raise Exception()
-        job_dict = add_job(start, end)
+        job_dict = add_job(data['start_date'], data['end_date'])
         return job_dict
     except:
         logging.error('invalid parameters, must pass a start_date and a end_date')
-        return jsonify({'message':'invalid parameters, must pass a start_date and a end_date \
-                        and start_date must come before end_date'})
+        return jsonify({'message':'invalid parameters, must pass a start_date and a end_date and start_date must come before end_date'})
 
 @app.route('/jobs', methods=['GET'])
 def get_jobs():
@@ -76,15 +76,17 @@ def get_chart(jobid):
     """
         Downloads results of a specific job
     """
+    logging.debug(rdb.keys())
+    #logging.debug(type(img))
     try:
         if get_job_by_id(jobid)['status'] != 'complete':
             return jsonify({'message': 'job is not finished yet, try again in a minute'})
-        path = f'/app/bike_trips_chart.png'
+        path = f'{jobid}.png'
         with open(path, 'wb') as f:
             f.write(rdb.hget(jobid, 'image'))
         return send_file(path, mimetype='image/png', as_attachment=True)
-    except:
-        logging.error(f'job_id not found: {jobid}')
+    except Exception as e:
+        logging.error(f'job_id not found: {jobid} ERROR: {e}')
         return jsonify({'message': 'job_id not found'})
     
 @app.route('/data', methods=['POST', 'GET', 'DELETE'])
