@@ -78,7 +78,7 @@ Example output using `$ curl localhost:5000/jobs -X POST -d '{"start_date": "05/
   "status": "submitted"
 }
 ~~~
-Means the job has been added to the redis database successfully.
+This means the job has been added to the redis database successfully. Also given start and end date parameters this job will output a bar chart allowing users to visualize the number of bike trips over a period of time
 ### `/jobs`
 - METHOD: GET
 - Gets all the current/past jobs in the redis database
