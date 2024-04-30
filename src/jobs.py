@@ -7,7 +7,7 @@ import os
 import logging
 import socket
 
-redis_host = os.environ.get('REDIS_HOST')
+redis_host = os.environ.get('REDIS_DB_SERVICE_SERVICE_HOST')
 _redis_port='6379'
 
 rd = redis.Redis(host=redis_host, port=_redis_port, db=0, decode_responses=True) # redis database

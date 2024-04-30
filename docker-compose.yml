@@ -17,9 +17,9 @@ services:
         depends_on:
             - redis-db
         environment:
-          - REDIS_HOST=redis-db
+          - REDIS_DB_SERVICE_SERVICE_HOST=redis-db
           - LOG_LEVEL=DEBUG
-        image: hieucannguyen/bike_share_web_app:1.0
+        image: hieucanguyen/bike_share_web_app:1.0
         ports:
             - 5000:5000
         command: ["python3", "bike_share_api.py"]
@@ -30,7 +30,7 @@ services:
       depends_on:
         - redis-db
       environment:
-        - REDIS_HOST=redis-db
+        - REDIS_DB_SERVICE_SERVICE_HOST=redis-db
         - LOG_LEVEL=DEBUG
       command: ["python3", "-u", "worker.py"]
                   
