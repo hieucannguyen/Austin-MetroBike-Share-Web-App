@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test-worker
+  name: worker
   labels:
-    app: test-worker
+    app: worker
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: test-worker
+      app: worker
   template:
     metadata:
       labels:
-        app: test-worker
+        app: worker
     spec:
       containers:
-        - name: test-worker
+        - name: worker
           imagePullPolicy: Always
           image: hieucanguyen/bike_share_web_app:1.0
           command: ["python3", "worker.py"]

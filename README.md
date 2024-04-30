@@ -124,7 +124,7 @@ Example output using `$ curl localhost:5000/download/a69f7bc1-f0eb-456d-94d8-a78
 Plot has downloaded.
 ### `/data`
 - METHOD: POST
-- Put the gene dataset into the redis database.
+- Put the bike trip dataset into the redis database.
 
 Example output using `$ curl localhost:5000/data -X POST`:
 ~~~
@@ -151,7 +151,7 @@ Example output using `$ curl localhost:5000/data`:
   ...
 ]
 ~~~
-Where each dictionary (looks like [/trip/<trip_id> GET route](#triptrip_id)) in the list is a gene with its associated data.
+Where each dictionary (looks like [/trip/<trip_id> GET route](#triptrip_id)) in the list is a bikr trip with its associated data.
 ### `/data`
 - METHOD: DELETE
 - Delete everything in the redis database
@@ -167,7 +167,7 @@ Where data was deleted successfully
 - METHOD: GET
 - Return a list of unique Trip IDs.
 
-Example output using `$ curl localhost:5000/genes`:
+Example output using `$ curl localhost:5000/trip`:
 ~~~
 [
   "29550686",

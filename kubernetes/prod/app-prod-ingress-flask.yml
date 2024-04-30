@@ -1,8 +1,7 @@
----
 kind: Ingress
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: test-flask-app-ingress
+  name: flask-app-ingress
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
@@ -15,6 +14,6 @@ spec:
           path: "/"
           backend:
             service:
-              name: test-flask-app-nodeport-service
+              name: flask-app-nodeport-service
               port:
                   number: 5000

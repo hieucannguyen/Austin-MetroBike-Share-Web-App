@@ -28,6 +28,16 @@ def get_data():
             data['bike_trips'].append(dict(row))
     return data
 
+@app.route('/help', methods = ['GET'])
+def help():
+    """
+        Route to send information about each endpoint in the API
+    """
+    return "API Endpoints:\n\n/jobs (POST): Route to send a job to redis database\n/jobs (GET): Gets all jobs in the redis database\n/jobs/<jobid> (GET): Gets the specific job specified by jobid\n\
+        /download/<jobid> (GET): Downloads the specific job result specified by jobid\n/data (POST): Put the bike trips dataset into the redis database\n\
+            /data (GET): Return all bike trips and their information from the redis database\n/data (DELETE): Delete everything in the redis database\n/trip (GET): Return a list of unique Trip IDs.\n\
+                /trip/<trip_id> (GET): Return bike trip information of a specific Trip ID\n/bikes (GET): Return a list of unique Bicycle IDs\n/bikes/<bike_id> (GET) Return trip information of a specific bike_id"
+
 @app.route('/jobs', methods = ['POST'])
 def submit_jobs():
     """
@@ -91,11 +101,11 @@ def get_chart(jobid: str):
 @app.route('/data', methods=['POST', 'GET', 'DELETE'])
 def handle_data():
     """
-        Route perfrom POST, GET, DELETE requests on bike share dataset
+        Route perfrom POST, GET, DELETE requests on bike trips dataset
 
         Methods:
             POST: Load entire dataset into redis database
-            GET: Return entire gene dataset from redis database in JSON
+            GET: Return entire bike trip dataset from redis database in JSON
             DELETE: Delete everything redis
     """
     if request.method == 'POST':
@@ -128,7 +138,7 @@ def get_trips():
 @app.route('/trips/<trip_id>', methods=['GET'])
 def get_specific_trip(trip_id: str):
     """
-        Return gene information of a specific trip_id
+        Return trip information of a specific trip_id
     """
     if rd.exists(trip_id):
         return json.loads(rd.get(trip_id))
@@ -149,10 +159,11 @@ def get_bikes():
     for id in result:
         result_list.append(id)
     return jsonify(result_list)
+
 @app.route('/bikes/<bike_id>', methods=['GET'])
 def get_specific_bike(bike_id: str):
     """
-        Return gene information of a specific bike_id
+        Return trip information of a specific bike_id
     """
     result = []
     for key in rd.keys():

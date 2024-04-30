@@ -2,21 +2,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test-flask-app
+  name: flask-app
   labels:
-    app: test-flask-app
+    app: flask-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: test-flask-app
+      app: flask-app
   template:
     metadata:
       labels:
-        app: test-flask-app
+        app: flask-app
     spec:
       containers:
-        - name: test-flask-app
+        - name: flask-app
           imagePullPolicy: Always
           image: hieucanguyen/bike_share_web_app:1.0
           command: ['python3', 'bike_share_api.py']  
