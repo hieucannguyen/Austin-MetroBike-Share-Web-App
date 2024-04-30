@@ -1,7 +1,8 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: redis-db
+  name: redis-deployment
   labels:
     app: redis-db
 spec:
@@ -15,14 +16,14 @@ spec:
         app: redis-db
     spec:
       containers:
-      - name: redis
+      - name: redis-db
         image: redis:7
         ports:
         - containerPort: 6379
         volumeMounts:
         - name: redis-data
           mountPath: "/data"
-    volumes:
-    - name: redis-data
-      persistentVolumeClaim:
+      volumes:
+      - name: redis-data
+        persistentVolumeClaim:
           claimName: redis-data

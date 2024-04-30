@@ -15,11 +15,12 @@ spec:
         app: worker
     spec:
       containers:
-      - name: worker
-        image: hieucannguyen/bike_share_web_app:1.0
-        command: ["python3", "-u", "worker.py"]
-        env:
-        - name: REDIS_HOST
-          value: "redis-db"
-        - name: LOG_LEVEL
-          value: DEBUG
+        - name: worker
+          imagePullPolicy: Always
+          image: hieucanguyen/bike_share_web_app:1.0
+          command: ["python3", "worker.py"]
+          env:
+           - name: REDIS_HOST
+             value: REDIS_DB_SERVICE_SERVICE_HOST
+           - name: LOG_LEVEL
+             value: DEBUG

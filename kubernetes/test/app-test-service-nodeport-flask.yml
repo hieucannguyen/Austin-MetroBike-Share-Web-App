@@ -1,6 +1,6 @@
 ---
 kind: Service
-apiVersion: apps/v1
+apiVersion: v1
 metadata:
     name: flask-app-nodeport-service
 spec:
