@@ -8,9 +8,6 @@ Must have [Docker](https://docs.docker.com/get-docker/) and [kubernetes](https:/
 ## Austin MetroBike Trips Data Overview
 The [City of Austin open data portal](https://data.austintexas.gov/Transportation-and-Mobility/Austin-MetroBike-Trips/tyfh-5r8s/about_data) provides access to the Austin MetroBike Trips dataset available in both CSV and JSON formats, but is limited to 1000 rows of data through their endpoint. Instead we will download the data as a whole using their download feature. Overall, the dataset contains information about bike trips, their associated trip IDs, membership type, bicycle IDs, bicycle types, checkout times, trip duration, and kiosk location, among others.
 
-~~~
-$ wget https://data.austintexas.gov/api/views/tyfh-5r8s/rows.csv?accessType=DOWNLOAD -O Austin_MetroBike_Trips.csv
-~~~
 ## File Descriptions
 ~~~
 Austin-MetroBike-Share-Web-App/
@@ -24,7 +21,7 @@ Austin-MetroBike-Share-Web-App/
     ├── test
     │   └── test_gene_api.py
     └── src
-      ├── gene_api.py
+      ├── bike_share_api.py
       ├── jobs.py
       └── worker.py
 ~~~
@@ -154,7 +151,7 @@ Example output using `$ curl localhost:5000/data`:
   ...
 ]
 ~~~
-Where each dictionary (looks like [/trip/<trip_id> GET route](#/trip/<trip_id>)) in the list is a gene with its associated data.
+Where each dictionary (looks like [/trip/<trip_id> GET route](#triptrip_id)) in the list is a gene with its associated data.
 ### `/data`
 - METHOD: DELETE
 - Delete everything in the redis database
