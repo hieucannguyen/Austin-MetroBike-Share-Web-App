@@ -33,10 +33,7 @@ def help():
     """
         Route to send information about each endpoint in the API
     """
-    return "API Endpoints:\n\n/jobs (POST): Route to send a job to redis database\n/jobs (GET): Gets all jobs in the redis database\n/jobs/<jobid> (GET): Gets the specific job specified by jobid\n\
-        /download/<jobid> (GET): Downloads the specific job result specified by jobid\n/data (POST): Put the bike trips dataset into the redis database\n\
-            /data (GET): Return all bike trips and their information from the redis database\n/data (DELETE): Delete everything in the redis database\n/trip (GET): Return a list of unique Trip IDs.\n\
-                /trip/<trip_id> (GET): Return bike trip information of a specific Trip ID\n/bikes (GET): Return a list of unique Bicycle IDs\n/bikes/<bike_id> (GET) Return trip information of a specific bike_id"
+    return "API Endpoints:\n\n/jobs (POST): Route to send a job to redis database\n/jobs (GET): Gets all jobs in the redis database\n/jobs/<jobid> (GET): Gets the specific job specified by jobid\n/download/<jobid> (GET): Downloads the specific job result specified by jobid\n/data (POST): Put the bike trips dataset into the redis database\n/data (GET): Return all bike trips and their information from the redis database\n/data (DELETE): Delete everything in the redis database\n/trip (GET): Return a list of unique Trip IDs.\n/trip/<trip_id> (GET): Return bike trip information of a specific Trip ID\n/bikes (GET): Return a list of unique Bicycle IDs\n/bikes/<bike_id> (GET) Return trip information of a specific bike_id\n"
 
 @app.route('/jobs', methods = ['POST'])
 def submit_jobs():
