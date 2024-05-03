@@ -52,11 +52,11 @@ def get_trips_freq_between_dates(start_date: str, end_date: str):
         trip = json.loads(rd.get(key))
         if trip.get('Checkout Datetime'): # none value handling
             checkout_date = trip.get('Checkout Datetime')[:10] # mm/dd/yyyy
-            checkout_date_by_month = checkout_date[:2]+'/'+checkout_date[6:10] # yyyy/mm
+            checkout_date_by_month = checkout_date[:2]+'/'+checkout_date[6:10] # mm/yyyy
             date = datetime.strptime(checkout_date, '%m/%d/%Y').date()
             if date >= start_date and date <= end_date:
                 if group_by_days:
-                    result[checkout_date] = result.get(checkout_date, 0) + 1 # reverse so it sorts properly
+                    result[checkout_date] = result.get(checkout_date, 0) + 1
                 else:
                     result[checkout_date_by_month] = result.get(checkout_date_by_month, 0) + 1
     logging.debug(f'length of result: {len(result)}')
@@ -71,6 +71,7 @@ def create_chart(result, group_by_days):
         Args:
             result (dict): dictionary of dates and counts
     """
+    logging.debug(f'Group by days: {group_by_days}')
     # sort dictionary so plot is in chronological order
     if not group_by_days:
         sorted_keys = sorted(result.keys(), key=lambda x: datetime.strptime(x, '%m/%Y'))
