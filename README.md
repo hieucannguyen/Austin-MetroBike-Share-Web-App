@@ -175,11 +175,11 @@ Example output using `$ curl localhost:5000/data`:
 ~~~
 [
   {
-    "trip_id": "29745510",
+    "Trip ID": "29745510",
     ...
   },
   {
-    "trip_id": "29550686",
+    "Trip ID": "29550686",
     ...
   },
   ...
@@ -197,11 +197,11 @@ Example output using `$ curl localhost:5000/data -X DELETE`:
 }
 ~~~
 Where data was deleted successfully
-### `/trip`
+### `/trips`
 - METHOD: GET
 - Return a list of unique Trip IDs.
 
-Example output using `$ curl localhost:5000/trip`:
+Example output using `$ curl localhost:5000/trips`:
 ~~~
 [
   "29550686",
@@ -212,11 +212,50 @@ Example output using `$ curl localhost:5000/trip`:
   ...
 ]
 ~~~
-### `/trip/<trip_id>`
+### `/trips/<trip_id>`
 - METHOD: GET
 - Return bike trip information of a specific Trip ID.
 
-Example output using `$ curl localhost:5000/trip/HGNC:20488`:
+Example output using `$ curl localhost:5000/trips/29632824`:
+~~~
+  {
+    "Trip ID": "29632824",
+    "Membership or Pass Type": "Local365",
+    "Bicycle ID": "21455",
+    "Bike Type": "electric",
+    "Checkout Datetime": "2023-05-15T17:12:36.000",
+    "Checkout Date": "2023-05-15T00:00:00.000",
+    "Checkout Time": "17:12:36",
+    "Checkout Kiosk Id": "2499",
+    "Checkout Kiosk": "2nd/Lavaca @ City Hall",
+    "Return Kiosk Id": "2499",
+    "Return Kiosk": "South Congress/Elizabeth",
+    "Trip Duration Minutes": "8",
+    "Month": "5",
+    "Year": "2023"
+  }
+~~~
+
+### `/bikes`
+- METHOD: GET
+- Return a list of unique bike IDs.
+
+Example output using `$ curl localhost:5000/bikes`:
+~~~
+[
+  "21455",
+  "21255",
+  "21495",
+  "11455",
+  "21055",
+  ...
+]
+~~~
+### `/bikes/<bike_id>`
+- METHOD: GET
+- Return bike trip information of a specific bike ID.
+
+Example output using `$ curl localhost:5000/trip/21455`:
 ~~~
   {
     "Trip ID": "29632824",
