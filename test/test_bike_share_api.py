@@ -66,7 +66,7 @@ def test_get_bikes():
     assert isinstance(response.json(), list) == True
 
 def test_get_specific_bike():
-    response = requests.get('http://127.0.0.1:5000/trips/19471844')
+    response = requests.get('http://127.0.0.1:5000/bikes/37')
     assert response.status_code == 200
-    assert response.json()['hgnc_id'] == 'HGNC:20488'
+    assert response.json()['Bicycle ID'] == '37'
     assert isinstance(response.json(), dict) == True
