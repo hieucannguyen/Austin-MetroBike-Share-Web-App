@@ -275,7 +275,7 @@ Example output using `$ curl localhost:5000/trip/21455`:
   }
 ~~~
 
-## Run unit tests
+## Run tests
 Ensure the Flask service is running [Run Flask Application Container](#run-flask-application-container)
 
 Use pytest to run all unit tests
