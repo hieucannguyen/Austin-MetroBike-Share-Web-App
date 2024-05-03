@@ -16,10 +16,29 @@ Austin-MetroBike-Share-Web-App/
     ├── requirements.txt
     ├── software_diagram.svg
     ├── README.md
+    ├── kubernetes
+    ├── prod
+    │   ├── app-prod-deployment-flask.yml
+    │   ├── app-prod-deployment-redis.yml
+    │   ├── app-prod-deployment-worker.yml
+    │   ├── app-prod-ingress-flask.yml
+    │   ├── app-prod-pvc-redis.yml
+    │   ├── app-prod-service-flask.yml
+    │   ├── app-prod-service-nodeport-flask.yml
+    │   └── app-prod-service-redis.yml
+    └── test
+    │   ├── app-test-deployment-flask.yml
+    │   ├── app-test-deployment-redis.yml
+    │   ├── app-test-deployment-worker.yml
+    │   ├── app-test-ingress-flask.yml
+    │   ├── app-test-pvc-redis.yml
+    │   ├── app-test-service-flask.yml
+    │   ├── app-test-service-nodeport-flask.yml
+    │   └── app-test-service-redis.yml
     ├── data
     │   └── .gitcanary
     ├── test
-    │   └── test_gene_api.py
+    │   └── bike_share_api.py
     └── src
       ├── bike_share_api.py
       ├── jobs.py
@@ -33,6 +52,11 @@ Austin-MetroBike-Share-Web-App/
 - [jobs.py](./src/jobs.py) Module to handle jobs requests 
 - [worker.py](./src/worker.py) worker to handle jobs in the redis database (queue) as they come in and then post results (plots) in the results database
 - [test_gene_api.py](./test/test_gene_api.py) Integration tests for flask app
+
+## Software Diagram
+![image](diagram.svg)
+
+*Software diagram of the Flask Application. Visualization of the containerized application using Docker and how the Flask app interacts with worker and Redis container.*
 
 ## Running the application using Docker
 ### Build the image
@@ -62,7 +86,17 @@ To stop the container use
 ~~~
 $ docker-compose down
 ~~~
-
+## Kubernetes Deployment
+### Deploy
+~~~
+$ kubectl apply -f kubernetes/prod/
+~~~
+### Using Web App
+Using the ingress
+~~~
+$ curl http://hieucannguyen.coe332.tacc.cloud/<route>
+~~~
+See [API Endpoints](#api-endpoints) for different routes.
 ## API Endpoints
 
 ### `/jobs`
