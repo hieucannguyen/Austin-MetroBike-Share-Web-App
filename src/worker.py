@@ -24,9 +24,9 @@ def do_work(jobid):
     # get job
     update_job_status(jobid, 'in progress')
     job = get_job_by_id(jobid)
-    date_freq = get_trips_freq_between_dates(job['start_date'], job['end_date'])
+    date_freq, group = get_trips_freq_between_dates(job['start_date'], job['end_date'])
     logging.debug(date_freq)
-    create_chart(date_freq)
+    create_chart(date_freq, group)
     with open('bike_trips_chart.png', 'rb') as f:
         img = f.read()
     logging.debug(type(img))
@@ -62,9 +62,9 @@ def get_trips_freq_between_dates(start_date: str, end_date: str):
     logging.debug(f'length of result: {len(result)}')
     if not result:
         logging.error('job did not find anything, empty result')
-    return result
+    return result, group_by_days
 
-def create_chart(result):
+def create_chart(result, group_by_days):
     """
         Returns a bar chart with dates and number of bike trips
 
@@ -72,7 +72,7 @@ def create_chart(result):
             result (dict): dictionary of dates and counts
     """
     # sort dictionary so plot is in chronological order
-    if len(result) > 61:
+    if not group_by_days:
         sorted_keys = sorted(result.keys(), key=lambda x: datetime.strptime(x, '%m/%Y'))
         sorted_values = [result[key] for key in sorted_keys]
     else:
