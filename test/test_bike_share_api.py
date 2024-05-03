@@ -16,12 +16,12 @@ def test_handle_data_POST():
     assert isinstance(response.json(), dict) == True
 
 def test_handle_data_GET():
-    response = requests.get("http://127.0.0.1:5000/data")
+    response = requests.get("http://127.0.0.1:5000/data?limit=1")
     assert response.status_code == 200
     assert isinstance(response.json(), list) == True
 
 def test_submit_jobs():
-    data = {"gene_group": "Antisense RNAs"}
+    data = {"start_date": "05/01/2020","end_date": "06/01/2020"}
     # Convert data to JSON format
     json_data = json.dumps(data)
     response = requests.post("http://127.0.0.1:5000/jobs", 
@@ -40,23 +40,33 @@ def test_submit_jobs():
     assert isinstance(response.json(), dict) == True
     
     # jobs result GET test
-    time.sleep(8)
-    response = requests.get('http://127.0.0.1:5000/results/'+JOB_ID)
+    time.sleep(600)
+    response = requests.get('http://127.0.0.1:5000/download/'+JOB_ID)
     assert response.status_code == 200
-    assert isinstance(response.json(), dict) == True
 
 def test_get_jobs():
     response = requests.get('http://127.0.0.1:5000/jobs')
     assert response.status_code == 200
     assert isinstance(response.json(), list) == True
 
-def test_get_genes():
-    response = requests.get('http://127.0.0.1:5000/genes')
+def test_get_trips():
+    response = requests.get('http://127.0.0.1:5000/trips')
     assert response.status_code == 200
     assert isinstance(response.json(), list) == True
 
-def test_get_specific_gene():
-    response = requests.get('http://127.0.0.1:5000/genes/HGNC:20488')
+def test_get_specific_trip():
+    response = requests.get('http://127.0.0.1:5000/trips/19471844')
+    assert response.status_code == 200
+    assert response.json()['Trip ID'] == '19471844'
+    assert isinstance(response.json(), dict) == True
+
+def test_get_bikes():
+    response = requests.get('http://127.0.0.1:5000/bikes')
+    assert response.status_code == 200
+    assert isinstance(response.json(), list) == True
+
+def test_get_specific_bike():
+    response = requests.get('http://127.0.0.1:5000/trips/19471844')
     assert response.status_code == 200
     assert response.json()['hgnc_id'] == 'HGNC:20488'
     assert isinstance(response.json(), dict) == True
