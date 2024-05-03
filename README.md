@@ -274,3 +274,14 @@ Example output using `$ curl localhost:5000/trip/21455`:
     "Year": "2023"
   }
 ~~~
+
+## Run unit tests
+Ensure the Flask service is running [Run Flask Application Container](#run-flask-application-container)
+
+Use pytest to run all unit tests
+~~~
+$ cd /test
+~~~
+~~~
+$ pytest
+~~~
