@@ -116,6 +116,25 @@ def handle_data():
             logging.error(f'(POST) Data not found')
             return jsonify({'message': 'Data was NOT added successfully'})
     if request.method == 'GET':
+        keys = rd.keys()
+        try:
+            offset = int(request.args.get("offset", 0))
+            if offset<0:
+                raise ValueError
+            limit = int(request.args.get("limit", len(keys)-offset))
+            if limit<0:
+                raise ValueError
+        except ValueError:
+            return "Invalid limit or offset parameter; must be a positive integer."
+        
+        if limit or offset:
+            result = []
+            for i in range(limit):
+                if offset+i>len(keys)-1:
+                    return jsonify(result)
+                result.append(json.loads(rd.get(keys[offset + i])))
+            return jsonify(result)
+
         result = []
         for key in rd.keys():
             result.append(json.loads(rd.get(key)))
